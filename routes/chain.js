@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const axios = require('axios');
 const { response } = require('../app');
+const { synchronousChain } = require('../utils/synchronousCalls');
+const { asyncChain } = require('../utils/asyncCalls');
 
 router.post('/hello',  (req, res) => {
         let requestNumber = req.body.num;
@@ -14,41 +16,18 @@ router.post('/', async (req, res) => {
 
     if ( req.body.chain && typeof req.body.chain === 'object' ) {
         let responseData = []
+        let baseUrl = req.body.baseUrl
         try {
             if (req.body.inSequence) {
-                console.log('sequence engaged')
-                let data = req.body.chain
-                for (let i = 0; i < data.length; i++) {
-                    let call = data[i]
-                    await axios({
-                        method: call.method,
-                        data: call.data,
-                        url: call.url
-                    }).then(response => {
-                        console.log(call)
-                        let body = {
-                            name: call.as ? call.as : i,
-                            num: call.data.num,
-                        }
-                        responseData.push(body)
-                    })
-                }                
+                await synchronousChain(req.body.chain, baseUrl)
+                    .then(response => {
+                        responseData = response
+                    })         
             } else {
-                console.log('no sequence engaged')
-                await Promise.all(req.body.chain.map( async (call) => {
-                    await axios({
-                        method: call.method,
-                        data: call.data,
-                        url: call.url
-                    }).then(response => {
-                        console.log(call)
-                        let body = {
-                            name: call.as ? call.as : call.method,
-                            num: call.data.num,
-                        }
-                        responseData.push(body)
-                    })
-                }))                
+                await asyncChain(req.body.chain, baseUrl)
+                    .then(response => {
+                        responseData = response
+                    })         
             }
             console.log('response => ', responseData)
             res.send(responseData)

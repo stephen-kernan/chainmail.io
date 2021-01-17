@@ -1,15 +1,21 @@
 const axios = require('axios')
 
-exports.asyncChain = async (chain) => {
+exports.asyncChain = async (chain, baseUrl) => {
     let responseData = []
     await Promise.all(chain.map( async (call) => {
         await axios({
             method: call.method,
             data: call.data,
-            url: call.url
+            url: baseUrl + call.url
         }).then(response => {
-            responseData.push(response.data)
+            let body = {
+                name: call.as ? call.as : call.method,
+                num: call.data.num,
+            }
+            responseData.push(body)
         })
-    }))
-    return responseData;
+    }))        
+    return new Promise (resolve => {
+        resolve(responseData)
+    });
 }
