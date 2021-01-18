@@ -1,22 +1,34 @@
 const axios = require('axios')
 
-exports.synchronousChain = async (chain, baseUrl) => {
-    let responseData = []
+exports.synchronousChain = async (chain, baseUrl, responseParams) => {
+    let responseData = {}
     for (let i = 0; i < chain.length; i++) {
         let call = chain[i]
+        let fullBodyRequested = responseParams.query_body || call.query_body || call === chain[-1]
+        let speedRequested = responseParams.query_speed || call.query_speed        
+        let callResponse = {}
+
+        if (fullBodyRequested || speedRequested) {
+            responseData[call.name ? call.name : i + 1] = callResponse
+        }
+
         await axios({
             method: call.method,
             data: call.data,
             url: baseUrl + call.url
-        }).then(() => {
-            let body = {
-                name: call.as ? call.as : i + 1,
-                num: call.data.num,
+        }).then(res => {
+            if (fullBodyRequested) {
+                callResponse.body = res.data
+            } 
+            
+            if (speedRequested) {
+                callResponse.speed = 'speed smoke test'
             }
-            responseData.push(body)
         })
     }
     return new Promise(resolve => {
-        resolve(responseData)        
+        if (responseParams) {
+            resolve(responseData)        
+        }
     }) 
 }
