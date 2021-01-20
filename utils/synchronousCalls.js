@@ -1,9 +1,12 @@
 const axios = require('axios')
+const { requestInterceptor, responseInterceptor } = require('../utils/returnCallSpeed')
 
 exports.synchronousChain = async (chain, baseUrl, responseParams) => {
+
     let responseData = {
         numCallsCompleted: 0
     }
+
     for (let i = 0; i < chain.length; i++) {
         let call = chain[i]
         let fullBodyRequested = responseParams.query_body || call.query_body || call === chain[-1]

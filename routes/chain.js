@@ -12,8 +12,6 @@ router.post('/hello',  (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    console.log(req.body)
-
     if ( req.body.chain && typeof req.body.chain === 'object' ) {
         let responseData;
         let baseUrl = req.body.baseUrl;
