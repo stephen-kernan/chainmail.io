@@ -1,14 +1,12 @@
 const express = require('express')
 const router = express.Router()
-const axios = require('axios');
-const { response } = require('../app');
 const { synchronousChain } = require('../utils/synchronousCalls');
-const { asyncChain } = require('../utils/asyncCalls');
-const { responseInterceptor, requestInterceptor } = require('../utils/returnCallSpeed');
 
 router.post('/hello',  (req, res) => {
         let requestNumber = req.body.num;
-        let response = `hello ${ requestNumber }`
+        let response = {
+            message: `hello ${ requestNumber }`
+        }
         res.send(response)
 });
 
@@ -33,7 +31,10 @@ router.post('/', async (req, res) => {
                             }
                             responseData[call].responseTimes.push(response[call].speed)
                         }
-                    })                  
+                    })
+                    .catch( err => {
+                        res.status(401).send(err.message)
+                    })                 
             }
 
             for (query in responseData) {
@@ -47,7 +48,7 @@ router.post('/', async (req, res) => {
 
             res.json(responseData)
         } catch (e) {
-            res.json(e)
+            res.status(401).send(err.message)
         }
     } else {
         res.json(`chain array must exist and must be an array of objects. currently => ${typeof req.body.chain}`)
