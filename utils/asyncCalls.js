@@ -1,4 +1,5 @@
 const axios = require('axios')
+const { requestInterceptor, responseInterceptor } = require('./returnCallSpeed')
 
 exports.asyncChain = async (chain, baseUrl, responseParams) => {
     let responseData = {
@@ -13,6 +14,11 @@ exports.asyncChain = async (chain, baseUrl, responseParams) => {
             responseData[call.name ? call.name : i + 1] = callResponse
         }
 
+        if (speedRequested) {
+            requestInterceptor()
+            responseInterceptor();
+        }
+
         await axios({
             method: call.method,
             data: call.data,
@@ -23,7 +29,7 @@ exports.asyncChain = async (chain, baseUrl, responseParams) => {
             } 
             
             if (speedRequested) {
-                callResponse.speed = 'speed smoke test'
+                callResponse.speed = res.duration
             }
 
             responseData.numCallsCompleted += 1

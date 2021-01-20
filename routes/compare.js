@@ -6,9 +6,6 @@ const { synchronousChain } = require('../utils/synchronousCalls');
 const { asyncChain } = require('../utils/asyncCalls');
 const { responseInterceptor, requestInterceptor } = require('../utils/returnCallSpeed')
 
-requestInterceptor();
-responseInterceptor();
-
 router.post('/hello',  (req, res) => {
         let requestNumber = req.body.num;
         let response = `hello ${ requestNumber }`
@@ -22,7 +19,7 @@ router.post('/', async (req, res) => {
         let baseUrl = req.body.baseUrl;
         let responseParams = {
             query_body: req.body.query_body,
-            query_speed: req.body.query_speed
+            query_speed: true
         };
         try {
             if (!req.body.async) {

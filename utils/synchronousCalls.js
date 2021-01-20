@@ -13,6 +13,11 @@ exports.synchronousChain = async (chain, baseUrl, responseParams) => {
         let speedRequested = responseParams.query_speed || call.query_speed        
         let callResponse = {}
 
+        if (speedRequested) {
+            requestInterceptor();
+            responseInterceptor();
+        }
+
         if (fullBodyRequested || speedRequested) {
             responseData[call.name ? call.name : i + 1] = callResponse
         }
@@ -27,7 +32,7 @@ exports.synchronousChain = async (chain, baseUrl, responseParams) => {
             } 
             
             if (speedRequested) {
-                callResponse.speed = 'speed smoke test'
+                callResponse.speed = res.duration
             }
         })
     }
