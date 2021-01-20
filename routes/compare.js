@@ -4,7 +4,7 @@ const axios = require('axios');
 const { response } = require('../app');
 const { synchronousChain } = require('../utils/synchronousCalls');
 const { asyncChain } = require('../utils/asyncCalls');
-const { responseInterceptor, requestInterceptor } = require('../utils/returnCallSpeed')
+const { responseInterceptor, requestInterceptor } = require('../utils/returnCallSpeed');
 
 router.post('/hello',  (req, res) => {
         let requestNumber = req.body.num;
@@ -14,25 +14,37 @@ router.post('/hello',  (req, res) => {
 
 router.post('/', async (req, res) => {
     if ( req.body.chain && typeof req.body.chain === 'object' ) {
-        let numberOfCalls = req.body.numberOfCalls || 1;
-        let responseData;
+        let numberOfCalls = req.body.number_of_calls || 1;
+        let responseData = {};
         let baseUrl = req.body.baseUrl;
         let responseParams = {
             query_body: req.body.query_body,
             query_speed: true
         };
         try {
-            if (!req.body.async) {
+            for (let i = 0; i < numberOfCalls; i++) {
                 await synchronousChain(req.body.chain, baseUrl, responseParams)
                     .then(response => {
-                        responseData = response
-                    })         
-            } else {
-                await asyncChain(req.body.chain, baseUrl, responseParams)
-                    .then(response => {
-                        responseData = response
-                    })         
+                        for (call in response) {
+                            if (!responseData[call]) {
+                                responseData[call] = {
+                                    responseTimes: []
+                                }
+                            }
+                            responseData[call].responseTimes.push(response[call].speed)
+                        }
+                    })                  
             }
+
+            for (query in responseData) {
+                let average = 0;
+                responseData[query].responseTimes.map( time => {
+                    average += time
+                })
+                average = average / responseData[query].responseTimes.length
+                responseData[query].average = average;
+            }
+
             res.json(responseData)
         } catch (e) {
             res.json(e)

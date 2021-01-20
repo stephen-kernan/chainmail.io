@@ -3,9 +3,7 @@ const { requestInterceptor, responseInterceptor } = require('../utils/returnCall
 
 exports.synchronousChain = async (chain, baseUrl, responseParams) => {
 
-    let responseData = {
-        numCallsCompleted: 0
-    }
+    let responseData = {}
 
     for (let i = 0; i < chain.length; i++) {
         let call = chain[i]
@@ -34,6 +32,8 @@ exports.synchronousChain = async (chain, baseUrl, responseParams) => {
             if (speedRequested) {
                 callResponse.speed = res.duration
             }
+
+            callResponse.name = call.name ? call.name : i + 1
         })
     }
     return new Promise(resolve => {

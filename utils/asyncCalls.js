@@ -2,9 +2,7 @@ const axios = require('axios')
 const { requestInterceptor, responseInterceptor } = require('./returnCallSpeed')
 
 exports.asyncChain = async (chain, baseUrl, responseParams) => {
-    let responseData = {
-        numCallsCompleted: 0
-    }
+    let responseData = {}
     await Promise.all(chain.map( async (call, i) => {
         let fullBodyRequested = responseParams.query_body || call.query_body || call === chain[-1]
         let speedRequested = responseParams.query_speed || call.query_speed
@@ -31,8 +29,6 @@ exports.asyncChain = async (chain, baseUrl, responseParams) => {
             if (speedRequested) {
                 callResponse.speed = res.duration
             }
-
-            responseData.numCallsCompleted += 1
         })
     }))        
     return new Promise (resolve => {
