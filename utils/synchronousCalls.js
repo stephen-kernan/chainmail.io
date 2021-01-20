@@ -1,7 +1,9 @@
 const axios = require('axios')
 
 exports.synchronousChain = async (chain, baseUrl, responseParams) => {
-    let responseData = {}
+    let responseData = {
+        numCallsCompleted: 0
+    }
     for (let i = 0; i < chain.length; i++) {
         let call = chain[i]
         let fullBodyRequested = responseParams.query_body || call.query_body || call === chain[-1]

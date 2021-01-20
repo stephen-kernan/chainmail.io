@@ -1,7 +1,9 @@
 const axios = require('axios')
 
 exports.asyncChain = async (chain, baseUrl, responseParams) => {
-    let responseData = {}
+    let responseData = {
+        numCallsCompleted: 0
+    }
     await Promise.all(chain.map( async (call, i) => {
         let fullBodyRequested = responseParams.query_body || call.query_body || call === chain[-1]
         let speedRequested = responseParams.query_speed || call.query_speed
@@ -23,6 +25,8 @@ exports.asyncChain = async (chain, baseUrl, responseParams) => {
             if (speedRequested) {
                 callResponse.speed = 'speed smoke test'
             }
+
+            responseData.numCallsCompleted += 1
         })
     }))        
     return new Promise (resolve => {

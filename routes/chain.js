@@ -12,6 +12,7 @@ router.post('/hello',  (req, res) => {
 });
 
 router.post('/', async (req, res) => {
+    console.log(req.body)
 
     if ( req.body.chain && typeof req.body.chain === 'object' ) {
         let responseData;
@@ -32,12 +33,12 @@ router.post('/', async (req, res) => {
                         responseData = response
                     })         
             }
-            res.send(responseData)
+            res.json(responseData)
         } catch (e) {
-            res.send(e)
+            res.json(e)
         }
     } else {
-        res.send(`chain array must exist and must be an array. currently a ${typeof req.body.chain}`)
+        res.json(`chain array must exist and must be an array of objects. currently => ${typeof req.body.chain}`)
     }
 })
 
