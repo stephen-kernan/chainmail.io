@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { synchronousChain } = require('../utils/synchronousCalls');
+const { synchronousChain } = require('../utils/synchronousChain');
 
 router.post('/hello',  (req, res) => {
         let requestNumber = req.body.num;
@@ -11,7 +11,7 @@ router.post('/hello',  (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    if ( req.body.chain && typeof req.body.chain === 'object' ) {
+    if ( req.body.chain && req.body.chain instanceof Array ) {
         let numberOfCalls = req.body.number_of_calls || 1;
         let responseData = {};
         let baseUrl = req.body.baseUrl;

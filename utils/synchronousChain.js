@@ -1,5 +1,5 @@
 const axios = require('axios')
-const { requestInterceptor, responseInterceptor } = require('../utils/returnCallSpeed')
+const { requestInterceptor, responseInterceptor } = require('./returnCallSpeed')
 
 exports.synchronousChain = async (chain, baseUrl, responseParams) => {
 
