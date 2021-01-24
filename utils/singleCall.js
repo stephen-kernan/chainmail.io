@@ -1,7 +1,7 @@
 const axios = require('axios')
 const { requestInterceptor, responseInterceptor } = require('./returnCallSpeed')
 
-exports.singleCall = async (call, baseUrl, responseParams) => {
+exports.singleCall = async (call, base_url, responseParams) => {
     let speedRequested = responseParams.query_speed || call.query_speed
     
     let callResponse = {}
@@ -14,7 +14,7 @@ exports.singleCall = async (call, baseUrl, responseParams) => {
     await axios({
         method: call.method,
         data: call.data,
-        url: baseUrl + call.url
+        url: base_url + call.url
     }).then(res => {
         callResponse.body = res.data
         

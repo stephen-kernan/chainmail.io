@@ -14,14 +14,14 @@ router.post('/', async (req, res) => {
     if ( req.body.chain && req.body.chain instanceof Array ) {
         let numberOfCalls = req.body.number_of_calls || 1;
         let responseData = {};
-        let baseUrl = req.body.baseUrl;
+        let base_url = req.body.base_url;
         let responseParams = {
             query_body: req.body.query_body,
             query_speed: true
         };
         try {
             for (let i = 0; i < numberOfCalls; i++) {
-                await synchronousChain(req.body.chain, baseUrl, responseParams)
+                await synchronousChain(req.body.chain, base_url, responseParams)
                     .then(response => {
                         for (call in response) {
                             if (!responseData[call]) {

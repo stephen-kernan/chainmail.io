@@ -1,5 +1,4 @@
 const axios = require('axios');
-const { request } = require('express');
 
 exports.requestInterceptor = () => {
     axios.interceptors.request.use( (config) => {

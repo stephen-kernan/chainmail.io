@@ -6,25 +6,25 @@ const { asyncChain } = require('../utils/asyncChain');
 router.post('/hello',  (req, res) => {
         let requestNumber = req.body.num;
         let response = `hello ${ requestNumber }`
-        res.send(response)
+        res.json({message: response})
 });
 
 router.post('/', async (req, res) => {
     if ( req.body.chain && req.body.chain instanceof Array ) {
         let responseData;
-        let baseUrl = req.body.baseUrl;
+        let base_url = req.body.base_url;
         let responseParams = {
             query_body: req.body.query_body,
             query_speed: req.body.query_speed
         };
         try {
             if (!req.body.async) {
-                await synchronousChain(req.body.chain, baseUrl, responseParams)
+                await synchronousChain(req.body.chain, base_url, responseParams)
                     .then(response => {
                         responseData = response
                     })         
             } else {
-                await asyncChain(req.body.chain, baseUrl, responseParams)
+                await asyncChain(req.body.chain, base_url, responseParams)
                     .then(response => {
                         responseData = response
                     })         

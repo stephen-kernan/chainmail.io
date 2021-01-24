@@ -15,20 +15,20 @@ router.post('/goodbye', (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-    let baseUrl = req.body.baseUrl;
+    let base_url = req.body.base_url;
     let responseParams = {
         query_speed: req.body.query_speed
     }
     try {
-        if ( req.body.calls && req.body.calls instanceof Array ) {
-            let calls = req.body.calls;
+        if ( req.body.chain && req.body.chain instanceof Array ) {
+            let calls = req.body.chain;
             let previousMaximum = 0;
             let randomNumber = Math.floor(Math.random() * 100)
             for (let i = 0; i < calls.length; i++) {
                 let call = calls[i]
                 let weight = call.weight ? call.weight : 100 / calls.length
                 if (previousMaximum <= randomNumber && randomNumber < (previousMaximum + weight)) {
-                    singleCall(call, baseUrl, responseParams)
+                    singleCall(call, base_url, responseParams)
                         .then(response => {
                             res.json(response)
                         })
