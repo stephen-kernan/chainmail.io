@@ -4,9 +4,15 @@ const { synchronousChain } = require('../utils/synchronousChain');
 const { asyncChain } = require('../utils/asyncChain');
 
 router.post('/hello',  (req, res) => {
-        let requestNumber = req.body.num;
-        let response = `hello ${ requestNumber }`
-        res.json({message: response})
+    let requestNumber = req.body.num;
+    let response = `hello ${ requestNumber }`
+    res.json({message: response})
+});
+
+router.post('/goodbye',  (req, res) => {
+    let requestNumber = req.body.num;
+    let response = `hello ${ requestNumber }`
+    res.json({message: response})
 });
 
 router.post('/', async (req, res) => {

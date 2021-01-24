@@ -10,6 +10,12 @@ router.post('/hello',  (req, res) => {
         res.send(response)
 });
 
+router.post('/goodbye', (req, res) => {
+    let requestNumber = req.body.num;
+    let response = `goodbye ${ requestNumber }`;
+    res.send(response)
+})
+
 router.post('/', async (req, res) => {
     if ( req.body.chain && req.body.chain instanceof Array ) {
         let numberOfCalls = req.body.number_of_calls || 1;
@@ -44,6 +50,10 @@ router.post('/', async (req, res) => {
                 })
                 average = average / responseData[query].responseTimes.length
                 responseData[query].average = average;
+            }
+
+            for (call in responseData) {
+                responseData[call].name = call;
             }
 
             res.json(responseData)

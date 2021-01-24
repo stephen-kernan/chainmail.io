@@ -67,7 +67,10 @@ exports.synchronousChain = async (chain, base_url, responseParams) => {
 
             if (fullBodyRequested || speedRequested) {
                 responseData[call.name ? call.name : i + 1] = callResponse
+                responseData[call.name ? call.name : i + 1].name = call.name ? call.name : i + 1
             }
+
+
         })
     }
 
