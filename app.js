@@ -10,6 +10,7 @@ var usersRouter = require('./routes/users');
 var chain = require('./routes/chain')
 var compare = require('./routes/compare')
 var route = require('./routes/route')
+var use_cases = require('./routes/use_cases')
 var app = express();
 
 app.use(logger('dev'));
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/chain', chain)
 app.use('/api/compare', compare)
 app.use('/api/route', route)
+app.use('/api/use_cases', use_cases)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
